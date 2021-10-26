@@ -11,7 +11,7 @@ datos2.txt: tarea2.x
 	./$< > $@
 
 
-fig.pdf: plot2.gp datos2.txt
+fig: plot2.gp datos2.txt
 	gnuplot $<
 
 clean:

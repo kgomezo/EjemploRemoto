@@ -1,0 +1,18 @@
+
+
+all: fig.pdf
+tarea2.x: tarea2.cpp
+
+
+%.x: %.cpp
+	c++ $< -o $@
+
+datos2.txt: tarea2.x
+	./$< > $@
+
+
+fig.pdf: plot2.gp datos2.txt
+	gnuplot $<
+
+clean:
+	rm -f a.out *.x *.txt *.pdf

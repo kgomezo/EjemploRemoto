@@ -2,6 +2,8 @@
 #include <cmath>
 #include <iostream>
 
+
+
 long isprime(int m)
 {
   int l=0;
@@ -27,6 +29,7 @@ long nthprime(long n)
 }
   
 void test_prime(void){
+
   std::cout <<"Probando que nthprime(1)==0 "<<"\n";
   assert(isprime(1) == 0 );
   std::cout <<"Probando que nthprime(10)==0 "<<"\n";

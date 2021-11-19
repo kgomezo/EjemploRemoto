@@ -11,8 +11,12 @@ int main(int argc, char *argv[])
 {
   test_prime();
   const int n = std::atoi(argv[1]);
-  std::cout << nthprime(n) << "\n";
-
+  if(n==0){
+    std::cout<<"No hay números primos"<< "\n";
+  }
+   else{
+      std::cout << nthprime(n) << "\n";
+    }
   return 0;
 }
 

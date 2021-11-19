@@ -1,0 +1,222 @@
+Reporte (archivo reporte.txt ) que contenga
+    ⁃    una explicación corta de cómo están distribuidos en memoria los tres arreglos declarados: Son continuos? quién va primero, segundo o tercero?
+    ⁃    un reporte suscinto de los cambios realizados para arreglar el código, indicando las mejoras y el para qué se hicieron y el porqué. Específicamente, debe indicar cuál era el objetivo inicial más probable, y cómo se debería corregir. Por ejemplo, si una impresión era algo como print(z, NY+NX), tiene algún sentido? cómo se escribiría mejor para hacer lo mismo pero sin generar errores?
+
+
+Los arreglos de memoria inicialmente están distribuidos continuos, con diferencias de pocos beats, luego, cuando en el código los borro y vuelven a tener valores, se distribuyen aleatoriamente, al parecer.
+
+La idea original que interpreté del código es que se querían imprimir los arreglos, primero con los valores iniciales, que serían "0"s, luego la intención parecía ser querer cambiar el tamaño de los arreglos y los componentes del arreglo x, así que lo hice poniendo estos cambios en un for y redefiniendo las variables de los arreglos con los nuevos tamaño deseados, es decir, pedí memoria pasa hacer esto, sino, como y,z venian con un tamaño establecido, al querer ponerle otro "espacio" u ocupar más lugar se provocaba memory leak. Posteriormente, en el siguiente conjunto de "print_array" se quería cambiar nuevamente, pero de forma diferente los componentes de los arreglos, asignandoles otros numeros,eso lo volví a poner en ciclos aparte y no dentro de la llamada a la funcion "printarray". Además, las operaciones que estaban en el original como print_array(y-NZ, NZ) no tenían sentido; se está restando un entero(NZ) a un array, por lo que el computador apuntaría a y(-NZ). Aquí también redefini las variables con los tamaños que se querían. Finalmente vacié los punteros para liberar memoria.
+
+En la función foo la organicé de manera que retornara 0 si la división no estaba definida, a pesar de que matemáticamente es incorrect no se me ocurrió otra cosa para poner. Y puse en una variable double la operación que se quería hacer para que retornara el resultado, osea la variable. Ademas con los datos a los que se llamaba esa función, 0 y -1, no podía estar definida la división,así que cambié el 0 por 2.
+EN la función bar simplemente, para que se viera mejor puse la operación en una variable y que retornara esa variable.
+En el print array también lo cambié para que se imprimeran los arreglos por grupos, y se viera más organizado.
+
+A continuación muestro los cambios más detalladamente:
+Función main ORIGINAL:
+int main (int argc, char **argv)
+{
+  int ii, jj;
+  ii =  0; //cambio
+  jj = -1;
+  foo(ii, jj);
+  foo(jj, ii);  //cambio para que imprimiera los resultados, sino pareciera que no sirve :v
+ 
+  baz(25.9);
+
+  const int NX = 2, NY = 3, NZ = 4;  //espacio. 
+  double *x, y[NY], z[NZ];  //no estan inicializadas en ningun valor
+  x = new double [NX];  //puntero sin inicializar
+  int ii, jj, kk; //kk no se usa. ii y jj ya estan inicializadas antes
+  print_array(x, NX);
+  print_array(y, NY);
+  print_array(z, NZ);
+  std::cout << std::endl; //le cambié para que imprimiera más ordenado
+
+  for (ii = 0; ii < NX; ++ii) {
+    x[jj] = ii; //no se usa el indice jj
+  }
+  print_array(x, NZ);
+  print_array(y, NY);
+  print_array(z, NZ + NY);
+  std::cout << std::endl;
+  for (jj = 0; jj < NY; ++jj) {
+    x[jj] = ii; //x no tiene el mismo tamaño que y
+    y[jj] = jj;
+  }
+  print_array(x-NY, NY);  //las restas ahí no tiene sentido
+  print_array(y-NZ, NZ);
+  print_array(z + NZ + NY, NX); //ni las sumas
+  std::cout << std::endl;
+
+   return EXIT_SUCCESS;
+}
+
+
+
+
+Función main cambiada:
+int main (int argc, char **argv)
+{
+  int ii, jj; //cambiarle el nombre
+  int kk=0;
+  ii =  2; //le cambié el 0 para evitar la divisón por cero
+  jj = -1;
+  std::cout << foo(ii, jj)<< "\t " << foo(jj, ii)<< std::endl;
+  //que imprima el resultado
+  std::cout <<"Raíz de 25.9: " << baz(25.9)<<std::endl;
+
+  const int NX = 2, NY = 3, NZ = 4;  //espacio. 
+  double *x = NULL; //inicialicé el puntero
+  double* y= NULL; //los cambié a punteros para que puedan cambiar de tamaño como se pretendía
+  double* z=NULL;
+  z = new double[NZ]; //tamaños iniciales que se quieren en los primeros arreglos
+  y = new double [NY];
+  x = new double [NX]; //new separa memoria que no esta inicializado.
+
+  for (int mm = 0; mm < NX; ++mm){
+    x[mm]=0; }
+  for (int h = 0; h < NY; ++h){
+    y[h]=0; }
+  for (int j = 0; j < NZ; ++j){
+    z[j]=0;} //inicializados, les doy valores iniciales a los componentes
+  
+  print_array(x, NX);
+  print_array(y, NY);
+  print_array(z, NZ);
+  std::cout << " "  << std::endl; //le puse los " "
+  delete[] x;
+  delete[] y;
+  delete[] z; //libero memoria, se quieren usar para nuevos arreglos con distintos tamaños
+  
+  y = new double [NY];
+  z = new double [NZ+NY];
+  x = new double [NZ]; //pido nueva memoria
+  
+  for (ii = 0; ii < NZ; ++ii) {
+    x[ii] = ii; //no usa jj,le puse ii
+  }
+  for (int k=0; k< (NZ+NY); ++k){ //con los for vuelvo a darles valores con el espacio que se pidió para cada arreglo
+    z[k]=0; }
+  for (int u=0; u < NY; ++u){
+    y[u] = 0;}
+  
+  print_array(x, NZ);
+  print_array(y, NY);
+  print_array(z, (NZ + NY));
+  std::cout << " " << std::endl; //le puse " "
+  delete[] x;
+  delete[] y;
+  delete[] z;
+  //libero memoria
+  //vuelvo a pedir espacio con los tamaños que se quiere
+  x = new double [NY];
+  y = new double [NZ];
+  z = new double [NX];
+ 
+
+  for (jj = 0; jj < NZ; ++jj) { //NZ porque  ahora tiene ese tamaño
+    y[jj] = jj-NZ; //para reemplazar la resta que tenia en el printarray()
+  }
+  for (int ll = 0; ll < NY; ++ll){
+    x[ll]= ll-NY;
+  } //lo puse en un ciclo aparte ya que x[jj] no tiene el mismo numero de componentes que y
+  for (kk = 0; kk < NX; ++kk){ //para reemplazar la suma en printarray
+    z[kk]=kk + NZ +NY ;
+
+  }
+ 
+  print_array(x, NY);
+  print_array(y, NZ);  //esta restando un array y un numero. Y tiene un numero menor de espacio que NZ, entra y saca un numero basura. Hay que modificar y
+  print_array(z, NX);
+  std::cout <<" " << std::endl;
+
+  delete [] x;
+  delete [] y;
+  delete [] z;
+  x = NULL; //vaciar para prevenir referencias de memoria invalidas
+  y = NULL;
+  z = NULL;
+
+   return EXIT_SUCCESS;
+}
+
+Funcion foo original
+int foo(int a, int b)
+{
+  return a/b + b/bar(a, b) + b/a;   //parentesis y dividir por cero
+}
+
+
+
+Funcion foo cambiada:
+
+int foo(int a, int b)
+{
+  if (a == 0 || b == 0 || bar(a,b) == 0) {
+    return 0; //retorne cero si la division no esta definida
+  }
+  else {
+    double n = ((a*1.00)/b) + ((b*1.00)/bar(a,b)) + ((b*1.00)/a);
+    return n; }   //parentesis y ya que son double *1.00
+}
+Funcion bar original:
+int bar(int a, int b)
+{
+  unsigned int c = a;
+  return c + a - b;   //parentesis
+}
+
+
+Funcion bar cambiada:
+
+int bar(int a, int b)
+{
+  unsigned int c = a;
+  int g = (c+a-b);
+  return g;   //parentesis, puse la operacion en una variable
+}
+Funcion baz original:
+double baz(double x)
+{
+  if (x = 0) return;
+  double v = 1-(x+1);
+  return std::sqrt(x)      //ponerlo en otra variable, v no se usa
+}
+
+
+Función baz cambiada:
+double baz(double x)
+{
+ 
+  double vv= sqrt(x);
+  return vv;      //ponerlo en otra variable, v no se usa así que la quité
+}
+
+
+Funcion Print original:
+void print_array(const double data[], const int & size) //overflow si size es mas grande
+{
+  std::cout << std::endl;   //what
+  for (int ii = 0; ii < size; ++ii) {
+    std::cout << data[ii] << "  " ;   
+  }
+}
+
+
+Funcion Print cambiada:
+
+void print_array(const double data[], const int & size) //overflow si size es mas grande
+{ //para que se impriman por grupos, mas bonito :3
+  const double *pointer[size];
+  for (int ii = 0; ii < size; ++ii) { 
+  
+    pointer[ii] = &data[ii];
+  }
+  for (int ji = 0; ji < size; ++ji){ 
+
+      std::cout << *pointer[ji] << "  " ;
+      }
+      std::cout<<" "<<std::endl;
+  
+
+}

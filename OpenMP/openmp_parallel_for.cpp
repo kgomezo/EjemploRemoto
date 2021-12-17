@@ -20,10 +20,10 @@ int main(int argc, char *argv[]) {
     for(i = 0; i < N; i++) {
         a[i] = 2*i*std::sin(std::sqrt(i/56.7)) +
             std::cos(std::pow(i*i, 0.3));
-	std::cout << a[i]<<"\n";
+
     }
 
-    std::cout << a[1] << "\n";
+    std::cout << a[N] << "\n";
 
     delete [] a;
     end=std::chrono::steady_clock::now();

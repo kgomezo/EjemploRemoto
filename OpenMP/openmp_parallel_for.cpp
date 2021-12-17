@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
             std::cos(std::pow(i*i, 0.3));
     }
 
-    std::cout << a[1] << "\n";
+    std::cout << a[i] << "\n";
 
     delete [] a;
     end=std::chrono::steady_clock::now();

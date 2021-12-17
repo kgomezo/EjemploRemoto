@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
 
     }
 
-    std::cout << a[N] << "\n";
+    std::cout << a[N-1] << "\n";
 
     delete [] a;
     end=std::chrono::steady_clock::now();

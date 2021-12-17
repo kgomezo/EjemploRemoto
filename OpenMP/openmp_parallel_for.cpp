@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
     std::cout << a[1] << "\n";
 
     delete [] a;
-    end::std::chrono::steady_clock::now();
+    end=std::chrono::steady_clock::now();
     print_elapsed(start,end);
     return 0;
 }

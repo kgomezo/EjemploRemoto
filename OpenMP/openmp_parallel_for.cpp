@@ -1,11 +1,15 @@
 #include <omp.h>
 #include <iostream>
 #include <cmath>
+#include <chrono>
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
 
 template<typename T>
 void print_elapsed(T & start, T & end);
 int main(int argc, char *argv[]) {
-  auto start = std::chrono::steady_clock::now();
+    auto start = std::chrono::steady_clock::now();
     const int N = 80000000;
     int i;
     double *a = new double[N];
@@ -25,6 +29,7 @@ int main(int argc, char *argv[]) {
     print_elapsed(start,end);
     return 0;
 }
+
 template <typename T>
 void print_elapsed(T & start, T & end )
 {
